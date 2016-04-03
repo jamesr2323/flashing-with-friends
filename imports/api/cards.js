@@ -5,7 +5,6 @@ import { check } from 'meteor/check';
 export const Cards = new Mongo.Collection('cards');
 
 if (Meteor.isServer) {
-  // This code only runs on the server
   Meteor.publish('cards', function tasksPublication() {
     return Cards.find();
   });
@@ -13,7 +12,7 @@ if (Meteor.isServer) {
 
 Meteor.methods({
 
-  'cards.insert'(front, back) {
+  'cards.insert'(front, back, deckId) {
     check(front, String);
     check(back, String);
 
@@ -21,25 +20,15 @@ Meteor.methods({
       throw new Meteor.Error('not authorized');
     }
 
+    console.log(deckId);
 
     Cards.insert({
       front: front,
       back: back,
-      created_at: new Date(),
-      user_id: Meteor.userId(),
+      createdAt: new Date(),
+      userId: Meteor.userId(),
       username: Meteor.user().username,
-    });
-  },
-  'cards.updateBox'(cardId, boxNumber, dueAt){
-    check(cardId, String);
-    check(boxNumber, Number);
-    check(dueAt, Date);
-
-    Cards.update(cardId, {
-      $set: {
-        boxNumber: boxNumber,
-        dueAt: dueAt
-      },
+      deckId: deckId
     });
   }
 });

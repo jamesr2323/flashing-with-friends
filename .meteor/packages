@@ -21,3 +21,4 @@ react-meteor-data
 accounts-ui
 accounts-password
 mrt:bootstrap-3
+dburles:collection-helpers
