@@ -1,3 +1,16 @@
+.body {
+  width: 100%;
+  height: 100%;
+}
+
+.hamburger {
+  font-size: 300%;
+}
+
+.deck-selector-container {
+  display: inline-block;
+}
+
 .add-deck-container {
   background: #fcc02a;
 }

@@ -1,5 +1,7 @@
 import React, { Component, PropTypes } from 'react';
 import ReactDOM  from 'react-dom';
+import Sidebar from 'react-sidebar';
+
 import { createContainer } from 'meteor/react-meteor-data';
 import { Meteor } from 'meteor/meteor';
 
@@ -17,42 +19,95 @@ import DeckAdder from './DeckAdder.jsx';
 
 class App extends Component {
 
-  renderCardsForUsers() {
-    return this.props.cardsForUsers.map((cardForUser) => (
-      <CardForUser key={cardForUser._id} cardForUser={cardForUser} />
-    )); 
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      sidebarOpen: false,
+      currentPage: 'study'
+    };
   }
 
-  renderDeckOptions() {
-    return this.props.decks.map( (deck) => (
-      <option key={deck._id} value={deck._id}>{deck.name}</option>
-    ));
+  onSetSidebarOpen(open) {
+    this.setState({
+      sidebarOpen: open
+    });
+  }
+
+  showStudy() {
+    this.setState({
+      currentPage: 'study'
+    });
+    this.onSetSidebarOpen(false);
+  }
+
+  renderStudy(){
+    if (this.props.cardForUser) {
+      return <CardForUser cardForUser={this.props.cardForUser} />
+    } else {
+      return ''
+    }
+  }
+
+  showEditDecks(){
+    this.setState({
+      currentPage: 'editDecks'
+    });
+    this.onSetSidebarOpen(false);
+  }
+
+  renderEditDecks(){
+    return (
+      <div>
+        <div className="row">
+          <h2>Add a card</h2>
+          <CardAdder />
+        </div>
+        <div className="row add-deck-container">
+          <h2>Add a deck</h2>
+          <DeckAdder />
+        </div>
+      </div>
+    );
+  }
+
+  renderContent(){
+    if (this.state.currentPage == 'study'){
+      return this.renderStudy();
+    } else if (this.state.currentPage = 'editDecks'){
+      return this.renderEditDecks();
+    } else {
+      return '';
+    }
   }
 
   render() {
+    var sidebarContent = <div className="sidebar">
+      { this.props.currentUser ?
+        <div>
+          <img className="img-responsive" src="http://www.theinquirer.net/IMG/683/194683/adobe-flash-player-logo-2011-270x167.jpg?1447298532" /> 
+          <ul className="list-group">
+            <li className="list-group-item"><AccountsUIWrapper /></li>
+            <li className="list-group-item"><a href="#" onClick={this.showStudy.bind(this)}>Study</a></li>
+            <li className="list-group-item"><a href="#" onClick={this.showEditDecks.bind(this)}>Edit Decks</a></li>
+          </ul>
+        </div> : '' }
+    </div>;
+    var styles = {sidebar: {background: 'white', width: '75%'}};
     return (
       <div className="container">
-        <AccountsUIWrapper />        
+        <Sidebar sidebar={sidebarContent}
+                 open={this.state.sidebarOpen}
+                 onSetOpen={this.onSetSidebarOpen.bind(this)}
+                 styles={styles}>
+        </Sidebar>
+                
 
         { this.props.currentUser ? 
           <div className="row">
             <div className="col-md-4">
-              <DeckSelector decks={this.props.decks} />
-              <div className="row">
-                <h2>Add a card</h2>
-                <CardAdder />
-              </div>
-              <div className="row add-deck-container">
-                <h2>Add a deck</h2>
-                <DeckAdder />
-              </div>
-            </div>
-
-            <div className="col-md-8">
-              { this.props.cardForUser ? 
-                <CardForUser cardForUser={this.props.cardForUser} />
-                : ''
-              }
+              <span className="glyphicon glyphicon-menu-hamburger" className="hamburger" onClick={this.onSetSidebarOpen.bind(this, true)}>≡</span> <DeckSelector decks={this.props.decks} />
+              {this.renderContent()}
             </div>
           </div> : '' }
       </div>

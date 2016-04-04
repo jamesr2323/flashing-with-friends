@@ -9,7 +9,7 @@ export default class CardForUser extends Component {
 
     this.state = {
       showBack: false
-    }
+    };
   }
 
   levelUp() {

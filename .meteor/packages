@@ -22,3 +22,4 @@ accounts-ui
 accounts-password
 mrt:bootstrap-3
 dburles:collection-helpers
+chriswessels:slideout

@@ -21,14 +21,19 @@ export default class DeckSelector extends Component {
 
   render(){
     return (
-      <div>
-        <label>Deck:</label>
-        <select
-          onChange={this.changeUserDeck.bind(this)}
-          ref="deckIdInput"
-        >
-          {this.renderDeckOptions()}
-        </select>
+      <div className="deck-selector-container">
+        <form>
+          <div className="form-group">
+            <select
+              onChange={this.changeUserDeck.bind(this)}
+              ref="deckIdInput"
+              className="form-control"
+              value={Meteor.user().currentDeck}
+            >
+              {this.renderDeckOptions()}
+            </select>
+          </div>
+        </form>
       </div>
     );
   }
