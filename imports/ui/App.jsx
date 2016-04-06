@@ -83,15 +83,18 @@ class App extends Component {
 
   render() {
     var sidebarContent = <div className="sidebar">
-      { this.props.currentUser ?
         <div>
           <img className="img-responsive" src="http://www.theinquirer.net/IMG/683/194683/adobe-flash-player-logo-2011-270x167.jpg?1447298532" /> 
           <ul className="list-group">
             <li className="list-group-item"><AccountsUIWrapper /></li>
-            <li className="list-group-item"><a href="#" onClick={this.showStudy.bind(this)}>Study</a></li>
-            <li className="list-group-item"><a href="#" onClick={this.showEditDecks.bind(this)}>Edit Decks</a></li>
+            { this.props.currentUser ?
+              <div>
+                <li className="list-group-item"><a href="#" onClick={this.showStudy.bind(this)}>Study</a></li>
+                <li className="list-group-item"><a href="#" onClick={this.showEditDecks.bind(this)}>Edit Decks</a></li>
+              </div>
+            : '' }
           </ul>
-        </div> : '' }
+        </div>
     </div>;
     var styles = {sidebar: {background: 'white', width: '75%'}};
     return (
@@ -103,13 +106,14 @@ class App extends Component {
         </Sidebar>
                 
 
-        { this.props.currentUser ? 
+        
           <div className="row">
             <div className="col-md-4">
-              <span className="glyphicon glyphicon-menu-hamburger" className="hamburger" onClick={this.onSetSidebarOpen.bind(this, true)}>≡</span> <DeckSelector decks={this.props.decks} />
-              {this.renderContent()}
+              <span className="glyphicon glyphicon-menu-hamburger" className="hamburger" onClick={this.onSetSidebarOpen.bind(this, true)}>≡</span> 
+              { this.props.currentUser ? <DeckSelector decks={this.props.decks} /> : '' }
+              { this.props.currentUser ? this.renderContent() : '' }
             </div>
-          </div> : '' }
+          </div>
       </div>
     );
   }
