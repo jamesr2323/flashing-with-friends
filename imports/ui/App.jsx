@@ -56,6 +56,12 @@ class App extends Component {
     this.onSetSidebarOpen(false);
   }
 
+  renderDeckCards() {
+    return this.props.currentDeck.cards().map( (card) => (
+      <li key={card._id}>{card.front} / {card.back}</li>
+    ));
+  }
+
   renderEditDecks(){
     return (
       <div>
@@ -63,6 +69,7 @@ class App extends Component {
           <h2>Add a card</h2>
           <CardAdder />
         </div>
+        {this.renderDeckCards()}
         <div className="row add-deck-container">
           <h2>Add a deck</h2>
           <DeckAdder />
@@ -170,6 +177,7 @@ export default createContainer( () => {
   return {
     cardForUser: cardForUser,
     currentUser: Meteor.user(),
-    decks: Decks.find().fetch()
+    decks: Decks.find().fetch(),
+    currentDeck: deck
   };
 }, App);
